@@ -1,0 +1,6 @@
+name "iyzipay-d"
+description "A minimal D application."
+authors "zafer"
+copyright "Copyright © 2017, zafer"
+license "proprietary"
+// dependency "iyzipay" version="~>master" path="../iyzipay"
