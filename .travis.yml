@@ -1,0 +1,12 @@
+language: d
+dist: xenial
+
+d: 
+  - dmd
+
+script: 
+  - dub build --force
+  - dub test
+  
+after_success:
+- bash <(curl -s https://codecov.io/bash)
