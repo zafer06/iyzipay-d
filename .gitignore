@@ -12,3 +12,5 @@ iyzipay-d-test-*
 *.o
 *.obj
 *.lst
+iyzipay-d
+iyzipay-log.txt

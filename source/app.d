@@ -1,23 +1,40 @@
 import std.stdio;
 import std.json;
 import std.string;
+import std.process;
 
 import iyzipay.request;
 
 void main()
 {
 	Options options;
-	options.apiKey = "your api key";
-	options.secretKey = "your api key";
+	options.apiKey = environment["API_KEY"];
+	options.secretKey = environment["SECRET_KEY"];
 	options.baseUrl = "https://sandbox-api.iyzipay.com";
 
 	apiTest(options);
 	binNumber(options);
 	installmentInfo(options);
-	payment(options);
+	createPayment(options);
+	retrievePayment(options);
 }
 
-void payment(Options options)
+void retrievePayment(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "paymentId": "10631024",
+        "paymentConversationId": "123456789"
+    }`;
+
+	Payment payment = new Payment();
+	string result = payment.retrieve(request, options);
+
+	writeResult("Retrieve Payment", result);
+}
+
+void createPayment(Options options)
 {
 	string request = `{
 		"locale": "tr",
@@ -97,7 +114,7 @@ void payment(Options options)
 	Payment payment = new Payment();
 	string result = payment.create(request, options);
 
-	writeResult("Payment", result);
+	writeResult("Create Payment", result);
 }
 
 void installmentInfo(Options options)
@@ -147,7 +164,7 @@ void writeResult(string description, string result)
 	}
 	else
 	{
-		writefln("--> %s: %s -- errorCode: %s -- errorMessage: %s -- errorGroup: %s",
-			description, json["status"].str, json["errorCode"].str, json["errorMessage"].str, json["errorGroup"].str);
+		writefln("--> %s: %s -- errorCode: %s -- errorMessage: %s",
+			description, json["status"].str, json["errorCode"].str, json["errorMessage"].str);
 	}
 }

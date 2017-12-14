@@ -62,11 +62,17 @@ class Payment : IyzipayResource
 {
     public string create(string request, Options options)
     {
-        string pki = toPkiString(request);
+        string pki = toPkiStringCreate(request);
         return connectHTTP(POST, options.baseUrl ~ "/payment/auth", options, request, pki);
     }
 
-    private string toPkiString(string request)
+    public string retrieve(string request, Options options)
+    {
+        string pki = toPkiStringRetrieve(request);
+        return connectHTTP(POST, options.baseUrl ~ "/payment/detail", options, request, pki);
+    }
+
+    private string toPkiStringCreate(string request)
     {
         JSONValue json = parseJSON(request);
 
@@ -85,6 +91,18 @@ class Payment : IyzipayResource
         pki.append("billingAddress", pkiAddress(json["billingAddress"]));
         pki.append("basketItems", pkiBasketItems(json["basketItems"].array()));
         pki.append("currency", json["currency"].str);
+        return pki.getPkiString;
+    }
+
+    private string toPkiStringRetrieve(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("paymentId", json["paymentId"].str);
+        pki.append("paymentConversationId", json["paymentConversationId"].str);
         return pki.getPkiString;
     }
 

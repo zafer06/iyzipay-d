@@ -10,6 +10,7 @@ import std.digest.sha: sha1Of;
 import std.base64: Base64;
 import std.experimental.logger;
 
+enum VERSION = "0.3.0";
 enum AUTHORIZATION = "Authorization";
 enum RANDOM_HEADER_NAME = "x-iyzi-rnd";
 enum CLIENT_VERSION = "x-iyzi-client-version";
@@ -59,7 +60,7 @@ class IyzipayResource
         string[string] headers;
         headers["Content-Type"] = "application/json";
         headers[RANDOM_HEADER_NAME] = randomString;
-        headers[CLIENT_VERSION] = "iyzipay-d-0.0.2";
+        headers[CLIENT_VERSION] = "iyzipay-d-" ~ VERSION;
         headers[AUTHORIZATION] = prepareAuthorizationString(pkiString, randomString, options);
         return headers;
     }
