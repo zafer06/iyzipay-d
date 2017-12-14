@@ -1,5 +1,5 @@
 name "iyzipay-d"
-description "A minimal D application."
+description "Unofficial iyzipay API d client"
 authors "zafer"
 copyright "Copyright © 2017, zafer"
 license "proprietary"
