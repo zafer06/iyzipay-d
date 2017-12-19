@@ -3,7 +3,7 @@ import std.json;
 import std.string;
 import std.process;
 
-import iyzipay.request;
+import iyzipay.requests;
 
 void main()
 {
@@ -17,6 +17,107 @@ void main()
 	installmentInfo(options);
 	createPayment(options);
 	retrievePayment(options);
+    createThreedsInitialize(options);
+    //createThreedsPayment(options);
+}
+
+void createThreedsPayment(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "paymentId": "10639167",
+        "conversationData": ""
+    }`;
+
+    ThreedsPayment threeds = new ThreedsPayment();
+    string result = threeds.create(request, options);
+
+	writeResult("ThreeDS Payment", result);
+}
+
+void createThreedsInitialize(Options options)
+{
+    string request = `{
+		"locale": "tr",
+		"conversationId": "123456789",
+		"price": "6.0",
+		"paidPrice": "6.5",
+		"installment": "1",
+		"paymentChannel": "WEB",
+		"basketId": "B67832",
+		"paymentGroup": "PRODUCT",
+        "paymentCard": {
+	        "cardHolderName": "John Doe",
+	        "cardNumber": "5528790000000008",
+	        "expireYear": "2030",
+	        "expireMonth": "12",
+	        "cvc": "123",
+	        "registerCard": 0
+	    },
+        "buyer": {
+    		"id": "BY789",
+    		"name": "John",
+    		"surname": "Doe",
+    		"identityNumber": "74300864791",
+    		"email": "email@email.com",
+    		"gsmNumber": "+905350000000",
+    		"registrationDate": "2013-04-21 15:12:09",
+    		"lastLoginDate": "2015-10-05 12:43:35",
+    		"registrationAddress": "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+    		"city": "Istanbul",
+    		"country": "Turkey",
+    		"zipCode": "34732",
+    		"ip": "85.34.78.112"
+        },
+        "shippingAddress": {
+    		"address": "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+    		"zipCode": "34742",
+    		"contactName": "Jane Doe",
+    		"city": "Istanbul",
+    		"country": "Turkey"
+        },
+        "billingAddress": {
+    		"address": "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+            "zipCode": "34742",
+    		"contactName": "Jane Doe",
+    		"city": "Istanbul",
+    		"country": "Turkey"
+    	},
+        "basketItems": [
+    		{
+    			"id": "BI101",
+    			"price": "3.0",
+    			"name": "Binocular",
+    			"category1": "Collectibles",
+    			"category2": "Accessories",
+    			"itemType": "PHYSICAL"
+    		},
+    		{
+    			"id": "BI102",
+    			"price": "2.0",
+    			"name": "Game code",
+    			"category1": "Game",
+    			"category2": "Online Game Items",
+    			"itemType": "VIRTUAL"
+    		},
+    		{
+    			"id": "BI103",
+    			"price": "1.0",
+    			"name": "Usb",
+    			"category1": "Electronics",
+    			"category2": "Usb / Cable",
+    			"itemType": "PHYSICAL"
+    		}
+    	],
+        "currency": "TRY",
+        "callbackUrl": "http://95.9.88.93:91/3dpage.php"
+    }`;
+
+    ThreedsInitialize threeds = new ThreedsInitialize();
+    string result = threeds.create(request, options);
+
+	writeResult("3D Initialize", result);
 }
 
 void retrievePayment(Options options)
@@ -160,7 +261,7 @@ void writeResult(string description, string result)
 
 	if (json["status"].str == "success")
 	{
-		writefln("--> %s: %s", description, json["status"].str);
+        writefln("--> %s: %s", description, json["status"].str);
 	}
 	else
 	{

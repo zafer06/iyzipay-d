@@ -10,6 +10,13 @@ class PkiBuilder
     {
         _pkiString = _pkiString ~ key ~ "=" ~ value ~ ",";
     }
+    unittest
+    {
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("key", "value");
+
+        assert(pki.getPkiString == "[key=value]");
+    }
 
     public void appendPrice(string key, long value)
     {
