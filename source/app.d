@@ -8,17 +8,52 @@ import iyzipay.requests;
 void main()
 {
 	Options options;
-	options.apiKey = environment["API_KEY"];
-	options.secretKey = environment["SECRET_KEY"];
-	options.baseUrl = "https://sandbox-api.iyzipay.com";
+    options.apiKey = environment["API_KEY"],
+    options.secretKey = environment["SECRET_KEY"],
+    options.baseUrl = "https://sandbox-api.iyzipay.com";
 
 	apiTest(options);
 	binNumber(options);
 	installmentInfo(options);
-	createPayment(options);
-	retrievePayment(options);
-    createThreedsInitialize(options);
+	//createPayment(options);
+	//retrievePayment(options);
+    //createThreedsInitialize(options);
     //createThreedsPayment(options);
+
+    //createCancel(options);
+    //createRefund(options);
+}
+
+void createRefund(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "paymentTransactionId": "11188574",
+        "price": "2.17",
+        "currency": "TRY",
+        "ip": "84.34.78.112"
+    }`;
+
+    Refund refund = new Refund();
+    string result = refund.create(request, options);
+
+	writeResult("Refund", result);
+}
+
+void createCancel(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "paymentId": "10639181",
+        "ip": "84.34.78.112"
+    }`;
+
+    Cancel cancel = new Cancel();
+    string result = cancel.create(request, options);
+
+	writeResult("Cancel", result);
 }
 
 void createThreedsPayment(Options options)
@@ -26,7 +61,7 @@ void createThreedsPayment(Options options)
     string request = `{
         "locale": "tr",
         "conversationId": "123456789",
-        "paymentId": "10639167",
+        "paymentId": "10639182",
         "conversationData": ""
     }`;
 
@@ -147,13 +182,13 @@ void createPayment(Options options)
 		"basketId": "B67832",
 		"paymentGroup": "PRODUCT",
         "paymentCard": {
-	        "cardHolderName": "John Doe",
-	        "cardNumber": "5528790000000008",
-	        "expireYear": "2030",
-	        "expireMonth": "12",
-	        "cvc": "123",
-	        "registerCard": 0
-	    },
+            "cardHolderName": "John Doe",
+            "cardNumber": "5528790000000008",
+            "expireYear": "2030",
+            "expireMonth": "12",
+            "cvc": "123",
+            "registerCard": 0
+        },
         "buyer": {
     		"id": "BY789",
     		"name": "John",

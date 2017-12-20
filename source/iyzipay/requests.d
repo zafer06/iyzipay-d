@@ -1,7 +1,8 @@
 module iyzipay.requests;
 
-import std.net.curl: HTTP;
 import std.json: JSONValue, parseJSON;
+import std.net.curl: HTTP;
+import std.conv: to;
 
 public import iyzipay.iyzipayresource;
 public import iyzipay.pkibuilder;
@@ -161,7 +162,7 @@ class Payment : IyzipayResource
         pki.append("expireYear", json["expireYear"].str);
         pki.append("expireMonth", json["expireMonth"].str);
         pki.append("cvc", json["cvc"].str);
-        pki.appendPrice("registerCard", json["registerCard"].integer);
+        pki.append("registerCard", to!string(json["registerCard"].integer));
         return pki.getPkiString;
     }
 }
@@ -252,7 +253,7 @@ class ThreedsInitialize: IyzipayResource
         pki.append("expireYear", json["expireYear"].str);
         pki.append("expireMonth", json["expireMonth"].str);
         pki.append("cvc", json["cvc"].str);
-        pki.appendPrice("registerCard", json["registerCard"].integer);
+        pki.append("registerCard", to!string(json["registerCard"].integer));
         return pki.getPkiString;
     }
 }
@@ -292,6 +293,52 @@ class ThreedsPayment: IyzipayResource
         pki.append("conversationId", json["conversationId"].str);
         pki.append("paymentId", json["paymentId"].str);
         pki.append("paymentConversationId", json["paymentConversationId"].str);
+        return pki.getPkiString;
+    }
+}
+
+class Cancel: IyzipayResource
+{
+    public string create(string request, Options options)
+    {
+        string pki = toPkiString(request);
+        return connectHTTP(POST, options.baseUrl ~ "/payment/cancel", options, request, pki);
+    }
+
+    private string toPkiString(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("paymentId", json["paymentId"].str);
+        pki.append("ip", json["ip"].str);
+        return pki.getPkiString;
+    }
+}
+
+class Refund: IyzipayResource
+{
+    public string create(string request, Options options)
+    {
+        string pki = toPkiString(request);
+        import std.stdio;
+        writeln("-> " ~ pki);
+        return connectHTTP(POST, options.baseUrl ~ "/payment/refund", options, request, pki);
+    }
+
+    private string toPkiString(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("paymentTransactionId", json["paymentTransactionId"].str);
+        pki.appendPrice("price", json["price"].str);
+        pki.append("ip", json["ip"].str);
+        pki.append("currency", json["currency"].str);
         return pki.getPkiString;
     }
 }
