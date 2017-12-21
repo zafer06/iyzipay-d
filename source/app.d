@@ -19,9 +19,63 @@ void main()
 	//retrievePayment(options);
     //createThreedsInitialize(options);
     //createThreedsPayment(options);
-
     //createCancel(options);
     //createRefund(options);
+    //createCard(options);
+    //deleteCard(options);
+    //retrieveCards(options);
+}
+
+void retrieveCards(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "cardUserKey": "card user key"
+    }`;
+
+    CardList card = new CardList();
+    string result = card.retrieve(request, options);
+
+	writeResult("Cards Retrieve", result);
+}
+
+void deleteCard(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "cardToken": "card token",
+        "cardUserKey": "card user key"
+    }`;
+
+    Card card = new Card();
+    string result = card.delete_(request, options);
+
+	writeResult("Card Delete", result);
+}
+
+void createCard(Options options)
+{
+    string request = `{
+        "locale": "tr",
+        "conversationId": "123456789",
+        "externalId": "external id",
+        "email": "email@email.com",
+        "cardUserKey": "userkey",
+        "card": {
+            "cardAlias": "card alias",
+            "cardHolderName": "John Doe",
+            "cardNumber": "5528790000000008",
+            "expireMonth": "12",
+            "expireYear": "2030"
+        }
+    }`;
+
+    Card card = new Card();
+    string result = card.create(request, options);
+
+	writeResult("Card Create", result);
 }
 
 void createRefund(Options options)

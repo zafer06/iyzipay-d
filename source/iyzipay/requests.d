@@ -9,6 +9,7 @@ public import iyzipay.pkibuilder;
 
 alias GET = HTTP.Method.get;
 alias POST = HTTP.Method.post;
+alias DELETE = HTTP.Method.del;
 
 class ApiTest : IyzipayResource
 {
@@ -339,6 +340,78 @@ class Refund: IyzipayResource
         pki.appendPrice("price", json["price"].str);
         pki.append("ip", json["ip"].str);
         pki.append("currency", json["currency"].str);
+        return pki.getPkiString;
+    }
+}
+
+class Card: IyzipayResource
+{
+    public string create(string request, Options options)
+    {
+        string pki = toPkiStringCreate(request);
+        return connectHTTP(POST, options.baseUrl ~ "/cardstorage/card", options, request, pki);
+    }
+
+    public string delete_(string request, Options options)
+    {
+        string pki = toPkiStringDelete(request);
+        return connectHTTP(DELETE, options.baseUrl ~ "/cardstorage/card", options, request, pki);
+    }
+
+    private string toPkiStringCreate(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("externalId", json["externalId"].str);
+        pki.append("email", json["email"].str);
+        pki.append("cardUserKey", json["cardUserKey"].str);
+        pki.append("card", pkiCard(json["card"]));
+        return pki.getPkiString;
+    }
+
+    private string toPkiStringDelete(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("cardUserKey", json["cardUserKey"].str);
+        pki.append("cardToken", json["cardToken"].str);
+        return pki.getPkiString;
+    }
+
+    private string pkiCard(JSONValue json)
+    {
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("cardAlias", json["cardAlias"].str);
+        pki.append("cardNumber", json["cardNumber"].str);
+        pki.append("expireYear", json["expireYear"].str);
+        pki.append("expireMonth", json["expireMonth"].str);
+        pki.append("cardHolderName", json["cardHolderName"].str);
+        return pki.getPkiString;
+    }
+}
+
+class CardList: IyzipayResource
+{
+    public string retrieve(string request, Options options)
+    {
+        string pki = toPkiString(request);
+        return connectHTTP(POST, options.baseUrl ~ "/cardstorage/cards", options, request, pki);
+    }
+
+    private string toPkiString(string request)
+    {
+        JSONValue json = parseJSON(request);
+
+        PkiBuilder pki = new PkiBuilder();
+        pki.append("locale", json["locale"].str);
+        pki.append("conversationId", json["conversationId"].str);
+        pki.append("cardUserKey", json["cardUserKey"].str);
         return pki.getPkiString;
     }
 }

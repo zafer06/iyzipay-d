@@ -10,7 +10,7 @@ import std.digest.sha: sha1Of;
 import std.base64: Base64;
 import std.experimental.logger;
 
-enum VERSION = "0.5.0";
+enum VERSION = "0.6.0";
 enum AUTHORIZATION = "Authorization";
 enum RANDOM_HEADER_NAME = "x-iyzi-rnd";
 enum CLIENT_VERSION = "x-iyzi-client-version";
