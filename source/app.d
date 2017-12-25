@@ -3,7 +3,7 @@ import std.json;
 import std.string;
 import std.process;
 
-import iyzipay.requests;
+import iyzipay;
 
 void main()
 {
