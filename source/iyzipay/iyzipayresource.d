@@ -10,7 +10,7 @@ import std.digest.sha: sha1Of;
 import std.base64: Base64;
 import std.experimental.logger;
 
-enum VERSION = "0.6.0";
+enum VERSION = "0.6.2";
 enum AUTHORIZATION = "Authorization";
 enum RANDOM_HEADER_NAME = "x-iyzi-rnd";
 enum CLIENT_VERSION = "x-iyzi-client-version";
@@ -30,18 +30,18 @@ class IyzipayResource
 
     public this()
     {
-        _logger = new FileLogger("iyzipay-log.txt");
+        //_logger = new FileLogger("iyzipay-log.txt");
     }
 
     public string connectHTTP(HTTP.Method method, string url, Options options, string request = "", string pkiString = "")
     {
     	string[string] headers = getHttpHeaders(pkiString, options);
-        _logger.log("[connectHTTP]", request);
-        
+        //_logger.log("[connectHTTP]", request);
+
         auto receivedData = appender!string();
     	HTTP client = HTTP(url);	// Connect API via HTTP
     	client.method = method;
-    	client.addRequestHeader("Content-Type", headers["Content-Type"]);
+    	//client.addRequestHeader("Content-Type", headers["Content-Type"]);
     	client.addRequestHeader("x-iyzi-rnd", headers["x-iyzi-rnd"]);
     	client.addRequestHeader("x-iyzi-client-version", headers["x-iyzi-client-version"]);
     	client.addRequestHeader("Authorization", headers["Authorization"]);
@@ -69,8 +69,8 @@ class IyzipayResource
     {
         string hash = Base64.encode(sha1Of(options.apiKey ~ randomString ~ options.secretKey ~ pkiString));
 
-        _logger.log("[PKI String] ", pkiString);
-        _logger.log("[Authorization String] ", IYZIWS_HEADER_NAME ~ options.apiKey ~ COLON ~ hash);
+        //_logger.log("[PKI String] ", pkiString);
+        //_logger.log("[Authorization String] ", IYZIWS_HEADER_NAME ~ options.apiKey ~ COLON ~ hash);
 
         return IYZIWS_HEADER_NAME ~ options.apiKey ~ COLON ~ hash;
     }
