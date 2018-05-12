@@ -1,7 +1,8 @@
 module iyzipay.pkibuilder;
 
 import std.algorithm.mutation: strip;
-import std.string: indexOf;
+import std.algorithm.searching: endsWith;
+import std.string: indexOf, stripRight;
 import std.format: format;
 import std.conv: to;
 
@@ -23,7 +24,13 @@ class PkiBuilder
 
     public void appendPrice(string key, string value)
     {
-        string formatPrice = value.indexOf('.') < 0 ? value ~ ".0" : value.strip('0');
+        string formatPrice = string.init;
+
+        if (value.indexOf('.') < 0) formatPrice = value ~ ".0";
+        else formatPrice = value.stripRight("0");
+
+        if (formatPrice.endsWith(".")) formatPrice = formatPrice ~ "0";
+
         _pkiString = _pkiString ~ key ~ "=" ~ formatPrice ~ ",";
     }
     unittest
@@ -34,8 +41,9 @@ class PkiBuilder
         pki.appendPrice("price5", "100.123");
         pki.appendPrice("price6", "100.10100");
         pki.appendPrice("price7", "100.120");
+        pki.appendPrice("price8", "100.00");
 
-        assert(pki.getPkiString == "[price3=100.0,price4=100.1,price5=100.123,price6=100.101,price7=100.12]",
+        assert(pki.getPkiString == "[price3=100.0,price4=100.1,price5=100.123,price6=100.101,price7=100.12,price8=100.0]",
                 pki.getPkiString);
     }
 

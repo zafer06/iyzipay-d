@@ -81,8 +81,8 @@ class Payment : IyzipayResource
         PkiBuilder pki = new PkiBuilder();
         pki.append("locale", json["locale"].str);
         pki.append("conversationId", json["conversationId"].str);
-        pki.append("price", json["price"].str);
-        pki.append("paidPrice", json["paidPrice"].str);
+        pki.appendPrice("price", json["price"].str);
+        pki.appendPrice("paidPrice", json["paidPrice"].str);
         pki.append("installment", json["installment"].str);
         pki.append("paymentChannel", json["paymentChannel"].str);
         pki.append("basketId", json["basketId"].str);
@@ -115,7 +115,7 @@ class Payment : IyzipayResource
         {
             PkiBuilder pki = new PkiBuilder();
             pki.append("id", item["id"].str);
-            pki.append("price", item["price"].str);
+            pki.appendPrice("price", item["price"].str);
             pki.append("name", item["name"].str);
             pki.append("category1", item["category1"].str);
             pki.append("category2", item["category2"].str);
@@ -183,8 +183,8 @@ class ThreedsInitialize: IyzipayResource
         PkiBuilder pki = new PkiBuilder();
         pki.append("locale", json["locale"].str);
         pki.append("conversationId", json["conversationId"].str);
-        pki.append("price", json["price"].str);
-        pki.append("paidPrice", json["paidPrice"].str);
+        pki.appendPrice("price", json["price"].str);
+        pki.appendPrice("paidPrice", json["paidPrice"].str);
         pki.append("installment", json["installment"].str);
         pki.append("paymentChannel", json["paymentChannel"].str);
         pki.append("basketId", json["basketId"].str);
@@ -206,7 +206,7 @@ class ThreedsInitialize: IyzipayResource
         {
             PkiBuilder pki = new PkiBuilder();
             pki.append("id", item["id"].str);
-            pki.append("price", item["price"].str);
+            pki.appendPrice("price", item["price"].str);
             pki.append("name", item["name"].str);
             pki.append("category1", item["category1"].str);
             pki.append("category2", item["category2"].str);

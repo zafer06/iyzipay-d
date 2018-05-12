@@ -10,7 +10,7 @@ import std.digest.sha: sha1Of;
 import std.base64: Base64;
 import std.experimental.logger;
 
-enum VERSION = "0.6.2";
+enum VERSION = "0.6.3";
 enum AUTHORIZATION = "Authorization";
 enum RANDOM_HEADER_NAME = "x-iyzi-rnd";
 enum CLIENT_VERSION = "x-iyzi-client-version";
@@ -26,17 +26,11 @@ struct Options
 
 class IyzipayResource
 {
-    private FileLogger _logger;
-
-    public this()
-    {
-        //_logger = new FileLogger("iyzipay-log.txt");
-    }
-
     public string connectHTTP(HTTP.Method method, string url, Options options, string request = "", string pkiString = "")
     {
     	string[string] headers = getHttpHeaders(pkiString, options);
-        //_logger.log("[connectHTTP]", request);
+
+        writefln("--> %s", pkiString);
 
         auto receivedData = appender!string();
     	HTTP client = HTTP(url);	// Connect API via HTTP
@@ -54,7 +48,6 @@ class IyzipayResource
 
     private string[string] getHttpHeaders(string pkiString, Options options)
     {
-        //string randomString = "12345678"; //Clock.currTime().toISOExtString();
         string randomString = Clock.currTime().toISOExtString();
 
         string[string] headers;
